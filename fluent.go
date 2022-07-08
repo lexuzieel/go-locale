@@ -26,7 +26,7 @@ func Message(id string) *FluentChain {
 	return (&FluentChain{}).Message(id)
 }
 
-// Set the language for the given eloquent locale call chain
+// Set the language for the given fluent call chain
 func (l *FluentChain) In(lang string) *FluentChain {
 	l.language = lang
 	return l
@@ -37,7 +37,7 @@ func In(language string) *FluentChain {
 	return (&FluentChain{}).In(language)
 }
 
-// Change the template arguments for the given eloquent locale call chain
+// Change the template arguments for the given fluent call chain
 func (l *FluentChain) With(args ...string) *FluentChain {
 	l.args = args
 	return l
