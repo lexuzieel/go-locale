@@ -56,3 +56,39 @@ func TestNestedMessage(t *testing.T) {
 		Message("nested.message.test").String(),
 	)
 }
+
+//go:embed messages/*.yaml
+var yamlFiles embed.FS
+
+func TestYamlFile(t *testing.T) {
+	Initialize("en", yamlFiles, "messages")
+
+	assert.Equal(t,
+		"Hello, Alex!",
+		Message("greeting").With("name", "Alex").String(),
+	)
+}
+
+//go:embed messages/*.toml
+var tomlFiles embed.FS
+
+func TestTomlFile(t *testing.T) {
+	Initialize("en", tomlFiles, "messages")
+
+	assert.Equal(t,
+		"Hello, Alex!",
+		Message("greeting").With("name", "Alex").String(),
+	)
+}
+
+//go:embed messages/*.json
+var jsonFiles embed.FS
+
+func TestJsonFile(t *testing.T) {
+	Initialize("en", jsonFiles, "messages")
+
+	assert.Equal(t,
+		"Hello, Alex!",
+		Message("greeting").With("name", "Alex").String(),
+	)
+}

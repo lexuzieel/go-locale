@@ -1,0 +1,2 @@
+[greeting]
+other = "Hello, {{.name}}!"
