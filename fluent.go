@@ -21,7 +21,7 @@ func (l *FluentChain) Message(id string) *FluentChain {
 	return l
 }
 
-// Constructs an instance of EloquentLocale and calls Message() on it
+// Constructs an instance of FluentChain and calls Message() on it
 func Message(id string) *FluentChain {
 	return (&FluentChain{}).Message(id)
 }
@@ -32,7 +32,7 @@ func (l *FluentChain) In(lang string) *FluentChain {
 	return l
 }
 
-// Constructs an instance of EloquentLocale and calls In() on it
+// Constructs an instance of FluentChain and calls In() on it
 func In(language string) *FluentChain {
 	return (&FluentChain{}).In(language)
 }
@@ -43,7 +43,7 @@ func (l *FluentChain) With(args ...string) *FluentChain {
 	return l
 }
 
-// Constructs an instance of EloquentLocale and calls With() on it
+// Constructs an instance of FluentChain and calls With() on it
 func With(args ...string) *FluentChain {
 	return (&FluentChain{}).With(args...)
 }
