@@ -2,18 +2,18 @@
 ![Coverage](https://img.shields.io/badge/Coverage-85.7%25-brightgreen)
 [![Go Reference](https://pkg.go.dev/badge/github.com/avixFF/go-locale.svg)](https://pkg.go.dev/github.com/avixFF/go-locale)
 
-# <center>_go-locale_</center>
+# _go-locale_
 
 A [fluent API](https://www.martinfowler.com/bliki/FluentInterface.html) wrapper
 for [go-i18n](https://github.com/nicksnyder/go-i18n) module.
 
-# Install
+## Install
 
 ```
 go get github.com/avixFF/go-locale
 ```
 
-# Usage
+## Usage
 
 Here is a complete example on how to use this package:
 
