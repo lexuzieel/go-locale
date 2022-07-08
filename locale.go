@@ -31,7 +31,7 @@ var fallbackLanguage string
 //
 //  //go:embed locale/*.yml
 //  var localeFS embed.FS
-//  var bundle = locale.Initialize("en", localeFS, "locale")
+//  err := locale.Initialize("en", localeFS, "locale")
 func Initialize(
 	defaultLanguage string,
 	filesystem fs.ReadDirFS,
