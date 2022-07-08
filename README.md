@@ -1,4 +1,5 @@
 # go-locale
+![Coverage](https://img.shields.io/badge/Coverage-85.7%25-brightgreen)
 
 A [fluent API](https://www.martinfowler.com/bliki/FluentInterface.html) wrapper
 for [go-i18n](https://github.com/nicksnyder/go-i18n) module.
