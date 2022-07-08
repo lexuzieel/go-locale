@@ -1,4 +1,4 @@
-# go-locale
+# go-locale [![Continuous Integration](https://github.com/avixFF/go-locale/actions/workflows/ci.yml/badge.svg)](https://github.com/avixFF/go-locale/actions/workflows/ci.yml) ![Coverage](https://img.shields.io/badge/Coverage-85.7%25-brightgreen) [![Go Reference](https://pkg.go.dev/badge/github.com/avixFF/go-locale.svg)](https://pkg.go.dev/github.com/avixFF/go-locale)
 
 A [fluent API](https://www.martinfowler.com/bliki/FluentInterface.html) wrapper
 for [go-i18n](https://github.com/nicksnyder/go-i18n) module.
