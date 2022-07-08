@@ -1,0 +1,120 @@
+name: Continuous Integration
+
+on:
+  push:
+    branches:
+      - main
+    pull_request:
+      branches:
+        - main
+
+  # Allows to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Setup Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.18
+
+      - name: Checkout the latest version of the repository
+        uses: actions/checkout@v2
+        with:
+          # otherwise, the token used is the GITHUB_TOKEN, instead of your
+          # personal access token.
+          persist-credentials: false
+          # otherwise, there would be errors pushing refs to the destination
+          # repository.
+          fetch-depth: 0
+
+      - name: Download Go modules
+        run: go mod download && go mod verify
+
+      - name: Run tests
+        run: |
+          go test -v ./... -covermode=count -coverprofile=coverage.out
+          go tool cover -func=coverage.out -o=coverage.out
+
+      - name: Generate coverage badge
+        uses: tj-actions/coverage-badge-go@v1.2
+        with:
+          filename: coverage.out
+
+      - name: Verify changed files
+        uses: tj-actions/verify-changed-files@v9.1
+        id: verify-changed-files
+        with:
+          files: README.md
+
+      - name: Commit changes
+        if: steps.verify-changed-files.outputs.files_changed == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add README.md
+          git commit -m "Updated coverage badge"
+
+      - name: Push changes
+        if: steps.verify-changed-files.outputs.files_changed == 'true'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ github.token }}
+          branch: ${{ github.head_ref }}
+
+  build:
+    name: Build
+    needs: test
+    runs-on: ubuntu-latest
+    if: ${{ github.ref == 'refs/heads/main' }}
+    steps:
+      - name: Checkout the latest version of the repository
+        uses: actions/checkout@v2
+        with:
+          # otherwise, the token used is the GITHUB_TOKEN, instead of your
+          # personal access token.
+          persist-credentials: false
+          # otherwise, there would be errors pushing refs to the destination
+          # repository.
+          fetch-depth: 0
+
+      - name: Bump version and push tag
+        uses: anothrNick/github-tag-action@1.36.0
+        id: version_bump
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          DEFAULT_BUMP: none
+          WITH_V: true
+
+      - name: Update version badge
+        uses: jacobtomlinson/gha-find-replace@v2
+        if: steps.version_bump.outputs.part != ''
+        with:
+          find: https://img.shields.io/badge/.*-blue
+          replace: https://img.shields.io/badge/Latest%20version-${{ steps.version_bump.outputs.new_tag }}-blue
+          include: "README.md"
+
+      - name: Verify changed files
+        if: steps.version_bump.outputs.part != ''
+        uses: tj-actions/verify-changed-files@v9.1
+        id: verify-changed-files
+        with:
+          files: README.md
+
+      - name: Commit changes
+        if: steps.verify-changed-files.outputs.files_changed == 'true'
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add README.md
+          git commit -m "Updated version badge"
+
+      - name: Push changes
+        if: steps.verify-changed-files.outputs.files_changed == 'true'
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ github.token }}
+          branch: ${{ github.head_ref }}
