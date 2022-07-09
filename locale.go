@@ -91,13 +91,19 @@ func GetDefaultLanguage() language.Tag {
 	return fallbackLanguage
 }
 
-func GetMessage(id string, tag language.Tag, args []any) string {
+func GetMessage(id string, tag language.Tag, args []any, count interface{}) string {
 	if id == "" {
 		return "<no message>"
 	}
 
+	data := parseArgs(args)
+	if data["Count"] == nil {
+		data["Count"] = count
+	}
+
 	message, err := getLocalizer(tag).Localize(&i18n.LocalizeConfig{
-		TemplateData: parseArgs(args),
+		TemplateData: data,
+		PluralCount:  count,
 		DefaultMessage: &i18n.Message{
 			ID:    id,
 			Other: fmt.Sprintf("<%s>", id),

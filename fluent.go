@@ -6,10 +6,11 @@ type FluentChain struct {
 	messageId string       // Message id as defined in the file
 	language  language.Tag // Translation language tag
 	args      []any        // Template arguments as key-value pairs
+	count     interface{}
 }
 
 func (l *FluentChain) String() string {
-	return GetMessage(l.messageId, l.language, l.args)
+	return GetMessage(l.messageId, l.language, l.args, l.count)
 }
 
 // Set the message id as specified in the file
@@ -48,4 +49,15 @@ func (l *FluentChain) With(args ...any) *FluentChain {
 // Constructs an instance of FluentChain and calls With() on it
 func With(args ...any) *FluentChain {
 	return (&FluentChain{}).With(args...)
+}
+
+// Change the plural count for the given fluent call chain
+func (l *FluentChain) Count(count interface{}) *FluentChain {
+	l.count = count
+	return l
+}
+
+// Constructs an instance of FluentChain and calls Count() on it
+func Count(count interface{}) *FluentChain {
+	return (&FluentChain{}).Count(count)
 }

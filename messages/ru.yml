@@ -1,0 +1,4 @@
+plural:
+    one: У меня {{.Count}} яблоко
+    few: У меня {{.Count}} яблока
+    many: У меня {{.Count}} яблок

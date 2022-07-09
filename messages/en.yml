@@ -3,3 +3,7 @@ greeting: Hello, {{.name}}!
 nested:
     message:
         test: This is a nested message
+
+plural:
+    one: I have an apple
+    other: I have {{.Count}} apples
