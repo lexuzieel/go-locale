@@ -31,11 +31,11 @@ func getLocalizer(lang string) *i18n.Localizer {
 //
 // For example, when the input is ["a", "b", "c"]
 // this function will return the following map: {"a": "b"}
-func parseArgs(args []string) map[string]string {
-	var argMap = make(map[string]string, 0)
+func parseArgs(args []any) map[string]any {
+	var argMap = make(map[string]any, 0)
 
 	for i := 0; i < 2*int(math.Floor(float64(len(args))/2)); i += 2 {
-		argMap[args[i]] = args[i+1]
+		argMap[args[i].(string)] = args[i+1]
 	}
 
 	return argMap

@@ -3,11 +3,12 @@ package locale
 type FluentChain struct {
 	messageId string   // Message id as defined in the file
 	language  string   // Translation file name
-	args      []string // Template arguments as key-value pairs
+	args      []any // Template arguments as key-value pairs
+	count     int
 }
 
 func (l *FluentChain) String() string {
-	return GetMessage(l.messageId, l.language, l.args)
+	return GetMessage(l.messageId, l.language, l.args, l.count)
 }
 
 // Set the message id as specified in the file
@@ -38,12 +39,12 @@ func In(language string) *FluentChain {
 }
 
 // Change the template arguments for the given fluent call chain
-func (l *FluentChain) With(args ...string) *FluentChain {
+func (l *FluentChain) With(args ...any) *FluentChain {
 	l.args = args
 	return l
 }
 
 // Constructs an instance of FluentChain and calls With() on it
-func With(args ...string) *FluentChain {
+func With(args ...any) *FluentChain {
 	return (&FluentChain{}).With(args...)
 }

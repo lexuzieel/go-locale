@@ -101,7 +101,7 @@ func GetDefaultLanguage() string {
 	return fallbackLanguage
 }
 
-func GetMessage(id string, lang string, args []string) string {
+func GetMessage(id string, lang string, args []any) string {
 	if id == "" {
 		return "<no message>"
 	}
