@@ -24,10 +24,7 @@ var localizers = make(map[language.Tag]*i18n.Localizer, 0)
 var fallbackLanguage language.Tag
 
 // Load localization files from directory specified by the <directoryPath>
-// and prepare them for usage.
-//
-// NOTE: This function allocates resources only once.
-// On consequent calls it uses loaded resources.
+// and prepare them for global usage.
 //
 //  //go:embed locale/*.yml
 //  var localeFS embed.FS
@@ -37,11 +34,6 @@ func Initialize(
 	filesystem fs.ReadDirFS,
 	directoryPath string,
 ) error {
-	// If a bundle has already been initialized just return it
-	if bundle != nil {
-		return nil
-	}
-
 	fallbackLanguage = defaultLanguage
 	bundle = i18n.NewBundle(defaultLanguage)
 
