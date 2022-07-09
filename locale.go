@@ -17,11 +17,11 @@ import (
 var bundle *i18n.Bundle
 
 // A list of localizers for different languages
-var localizers = make(map[string]*i18n.Localizer, 0)
+var localizers = make(map[language.Tag]*i18n.Localizer, 0)
 
 // Fallback language to be used when no suitable
 // localization string is not found
-var fallbackLanguage string
+var fallbackLanguage language.Tag
 
 // Load localization files from directory specified by the <directoryPath>
 // and prepare them for usage.
@@ -33,7 +33,7 @@ var fallbackLanguage string
 //  var localeFS embed.FS
 //  err := locale.Initialize("en", localeFS, "locale")
 func Initialize(
-	defaultLanguage string,
+	defaultLanguage language.Tag,
 	filesystem fs.ReadDirFS,
 	directoryPath string,
 ) error {
@@ -42,13 +42,8 @@ func Initialize(
 		return nil
 	}
 
-	tag, err := language.Parse(defaultLanguage)
-	if err != nil {
-		return err
-	}
-
 	fallbackLanguage = defaultLanguage
-	bundle = i18n.NewBundle(tag)
+	bundle = i18n.NewBundle(defaultLanguage)
 
 	bundle.RegisterUnmarshalFunc("yml", yaml.Unmarshal)
 	bundle.RegisterUnmarshalFunc("yaml", yaml.Unmarshal)
@@ -75,18 +70,21 @@ func Initialize(
 			return err
 		}
 
-		// Get file name and use it as the key for the localizer
-		lang := strings.TrimSuffix(entry.Name(), filepath.Ext(entry.Name()))
-		localizers[lang] = i18n.NewLocalizer(bundle, lang)
+		// Deduce language from the file name (without extension)
+		tag := language.Make(
+			strings.TrimSuffix(entry.Name(), filepath.Ext(entry.Name())),
+		)
+
+		localizers[tag] = i18n.NewLocalizer(bundle, tag.String())
 	}
 
 	return nil
 }
 
-func GetLanguages() []string {
+func GetLanguages() []language.Tag {
 	checkIfInitializaed()
 
-	keys := []string{}
+	keys := []language.Tag{}
 
 	for k := range localizers {
 		keys = append(keys, k)
@@ -95,22 +93,28 @@ func GetLanguages() []string {
 	return keys
 }
 
-func GetDefaultLanguage() string {
+func GetDefaultLanguage() language.Tag {
 	checkIfInitializaed()
 
 	return fallbackLanguage
 }
 
-func GetMessage(id string, lang string, args []any) string {
+func GetMessage(id string, tag language.Tag, args []any) string {
 	if id == "" {
 		return "<no message>"
 	}
 
-	return getLocalizer(lang).MustLocalize(&i18n.LocalizeConfig{
+	message, err := getLocalizer(tag).Localize(&i18n.LocalizeConfig{
 		TemplateData: parseArgs(args),
 		DefaultMessage: &i18n.Message{
 			ID:    id,
 			Other: fmt.Sprintf("<%s>", id),
 		},
 	})
+
+	if err != nil {
+		return fmt.Sprintf("<error: %s>", err)
+	}
+
+	return message
 }

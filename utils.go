@@ -4,18 +4,19 @@ import (
 	"math"
 
 	"github.com/nicksnyder/go-i18n/v2/i18n"
+	"golang.org/x/text/language"
 )
 
 func checkIfInitializaed() {
-	if fallbackLanguage == "" {
+	if fallbackLanguage == language.Und {
 		panic("locale is not initialized. Did you forget to run Initialize()?")
 	}
 }
 
-func getLocalizer(lang string) *i18n.Localizer {
+func getLocalizer(tag language.Tag) *i18n.Localizer {
 	checkIfInitializaed()
 
-	localizer := localizers[lang]
+	localizer := localizers[tag]
 
 	// If localizer was not found, fallback
 	// to the one for the default language
