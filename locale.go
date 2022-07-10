@@ -101,7 +101,7 @@ func GetMessage(id string, tag language.Tag, args []any, count interface{}) stri
 		data["Count"] = count
 	}
 
-	message, err := getLocalizer(tag).Localize(&i18n.LocalizeConfig{
+	message, _ := getLocalizer(tag).Localize(&i18n.LocalizeConfig{
 		TemplateData: data,
 		PluralCount:  count,
 		DefaultMessage: &i18n.Message{
@@ -109,10 +109,6 @@ func GetMessage(id string, tag language.Tag, args []any, count interface{}) stri
 			Other: fmt.Sprintf("<%s>", id),
 		},
 	})
-
-	if err != nil {
-		return fmt.Sprintf("<error: %s>", err)
-	}
 
 	return message
 }
