@@ -61,3 +61,17 @@ func (l *FluentChain) Count(count interface{}) *FluentChain {
 func Count(count interface{}) *FluentChain {
 	return (&FluentChain{}).Count(count)
 }
+
+// Change the plural count for the given fluent call chain
+func (l *FluentChain) Mock(text string) *FluentChain {
+	if mocking {
+		l.messageId = text
+	}
+
+	return l
+}
+
+// Constructs an instance of FluentChain and calls Count() on it
+func Mock(text string) *FluentChain {
+	return (&FluentChain{}).Mock(text)
+}

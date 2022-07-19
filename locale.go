@@ -2,7 +2,6 @@ package locale
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/fs"
 	"path/filepath"
 	"strings"
@@ -23,6 +22,19 @@ var localizers = make(map[language.Tag]*i18n.Localizer, 0)
 // localization string is not found
 var fallbackLanguage language.Tag
 
+var mocking = false
+
+func makeBundle(defaultLanguage language.Tag) *i18n.Bundle {
+	bundle = i18n.NewBundle(defaultLanguage)
+
+	bundle.RegisterUnmarshalFunc("yml", yaml.Unmarshal)
+	bundle.RegisterUnmarshalFunc("yaml", yaml.Unmarshal)
+	bundle.RegisterUnmarshalFunc("toml", toml.Unmarshal)
+	bundle.RegisterUnmarshalFunc("json", json.Unmarshal)
+
+	return bundle
+}
+
 // Load localization files from directory specified by the <directoryPath>
 // and prepare them for global usage.
 //
@@ -35,12 +47,7 @@ func Initialize(
 	directoryPath string,
 ) error {
 	fallbackLanguage = defaultLanguage
-	bundle = i18n.NewBundle(defaultLanguage)
-
-	bundle.RegisterUnmarshalFunc("yml", yaml.Unmarshal)
-	bundle.RegisterUnmarshalFunc("yaml", yaml.Unmarshal)
-	bundle.RegisterUnmarshalFunc("toml", toml.Unmarshal)
-	bundle.RegisterUnmarshalFunc("json", json.Unmarshal)
+	bundle = makeBundle(defaultLanguage)
 
 	if directoryPath == "" {
 		directoryPath = "."
@@ -69,6 +76,22 @@ func Initialize(
 
 		localizers[tag] = i18n.NewLocalizer(bundle, tag.String())
 	}
+
+	return nil
+}
+
+func InitializeMock(
+	defaultLanguage language.Tag,
+) error {
+	fallbackLanguage = defaultLanguage
+	bundle = makeBundle(defaultLanguage)
+
+	localizers[defaultLanguage] = i18n.NewLocalizer(
+		bundle,
+		defaultLanguage.String(),
+	)
+
+	mocking = true
 
 	return nil
 }
@@ -106,7 +129,7 @@ func GetMessage(id string, tag language.Tag, args []any, count interface{}) stri
 		PluralCount:  count,
 		DefaultMessage: &i18n.Message{
 			ID:    id,
-			Other: fmt.Sprintf("<%s>", id),
+			Other: id,
 		},
 	})
 
