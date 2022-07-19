@@ -45,8 +45,8 @@ func TestMessageAccessor(t *testing.T) {
 		Message("greeting").In(language.Spanish).With("name", "Alex").String(),
 	)
 
-	assert.Equal(t, "<unknown>", Message("unknown").String())
-	assert.Equal(t, "<unknown>", Message("unknown").In(language.German).String())
+	assert.Equal(t, "unknown", Message("unknown").String())
+	assert.Equal(t, "unknown", Message("unknown").In(language.German).String())
 }
 
 func TestMessageEnglishPluralization(t *testing.T) {
