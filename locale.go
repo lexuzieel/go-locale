@@ -80,9 +80,9 @@ func Initialize(
 	return nil
 }
 
-func InitializeMock(
-	defaultLanguage language.Tag,
-) error {
+func InitializeMock() error {
+	defaultLanguage := language.English
+
 	fallbackLanguage = defaultLanguage
 	bundle = makeBundle(defaultLanguage)
 
@@ -114,14 +114,14 @@ func GetDefaultLanguage() language.Tag {
 	return fallbackLanguage
 }
 
-func GetMessage(id string, tag language.Tag, args []any, count interface{}) string {
-	if id == "" {
-		return "<no message>"
-	}
-
+func GetMessage(id string, tag language.Tag, args []any, count interface{}, fallback string) string {
 	data := parseArgs(args)
 	if data["Count"] == nil {
 		data["Count"] = count
+	}
+
+	if fallback == "" {
+		fallback = id
 	}
 
 	message, _ := getLocalizer(tag).Localize(&i18n.LocalizeConfig{
@@ -129,7 +129,7 @@ func GetMessage(id string, tag language.Tag, args []any, count interface{}) stri
 		PluralCount:  count,
 		DefaultMessage: &i18n.Message{
 			ID:    id,
-			Other: id,
+			Other: fallback,
 		},
 	})
 

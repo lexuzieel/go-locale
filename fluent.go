@@ -4,13 +4,23 @@ import "golang.org/x/text/language"
 
 type FluentChain struct {
 	messageId string       // Message id as defined in the file
+	fallback  string       // Fallback message when no message is found
+	mock      string       // Mock message to use during testing (replaces fallback)
 	language  language.Tag // Translation language tag
 	args      []any        // Template arguments as key-value pairs
 	count     interface{}
 }
 
 func (l *FluentChain) String() string {
-	return GetMessage(l.messageId, l.language, l.args, l.count)
+	id := l.messageId
+	fallback := l.fallback
+
+	if mocking && len(l.mock) > 0 {
+		id = ""
+		fallback = l.mock
+	}
+
+	return GetMessage(id, l.language, l.args, l.count, fallback)
 }
 
 // Set the message id as specified in the file
@@ -65,13 +75,24 @@ func Count(count interface{}) *FluentChain {
 // Change the plural count for the given fluent call chain
 func (l *FluentChain) Mock(text string) *FluentChain {
 	if mocking {
-		l.messageId = text
+		l.mock = text
 	}
 
 	return l
 }
 
-// Constructs an instance of FluentChain and calls Count() on it
+// Constructs an instance of FluentChain and calls Mock() on it
 func Mock(text string) *FluentChain {
 	return (&FluentChain{}).Mock(text)
+}
+
+// Change the plural count for the given fluent call chain
+func (l *FluentChain) Fallback(text string) *FluentChain {
+	l.fallback = text
+	return l
+}
+
+// Constructs an instance of FluentChain and calls Count() on it
+func Fallback(text string) *FluentChain {
+	return (&FluentChain{}).Fallback(text)
 }
