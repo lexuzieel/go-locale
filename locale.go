@@ -63,7 +63,7 @@ func Initialize(
 		// Load each file into the bundle
 		_, err = bundle.LoadMessageFileFS(
 			filesystem,
-			filepath.Join(directoryPath, entry.Name()),
+			directoryPath+"/"+entry.Name(),
 		)
 		if err != nil {
 			return err
