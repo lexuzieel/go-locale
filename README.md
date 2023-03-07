@@ -1,6 +1,5 @@
 [![Continuous Integration](https://github.com/MajorLettuce/go-locale/actions/workflows/ci.yml/badge.svg)](https://github.com/MajorLettuce/go-locale/actions/workflows/ci.yml)
 ![Coverage](https://img.shields.io/badge/Coverage-71.8%25-brightgreen)
-![Latest version](https://img.shields.io/badge/Latest%20version-v0.2.0-blue)
 [![Go Reference](https://pkg.go.dev/badge/github.com/MajorLettuce/go-locale.svg)](https://pkg.go.dev/github.com/MajorLettuce/go-locale)
 
 # go-locale
