@@ -1,7 +1,7 @@
-[![Continuous Integration](https://github.com/avixFF/go-locale/actions/workflows/ci.yml/badge.svg)](https://github.com/avixFF/go-locale/actions/workflows/ci.yml)
+[![Continuous Integration](https://github.com/MajorLettuce/go-locale/actions/workflows/ci.yml/badge.svg)](https://github.com/MajorLettuce/go-locale/actions/workflows/ci.yml)
 ![Coverage](https://img.shields.io/badge/Coverage-71.8%25-brightgreen)
 ![Latest version](https://img.shields.io/badge/Latest%20version-v0.2.0-blue)
-[![Go Reference](https://pkg.go.dev/badge/github.com/avixFF/go-locale.svg)](https://pkg.go.dev/github.com/avixFF/go-locale)
+[![Go Reference](https://pkg.go.dev/badge/github.com/MajorLettuce/go-locale.svg)](https://pkg.go.dev/github.com/MajorLettuce/go-locale)
 
 # go-locale
 
@@ -11,7 +11,7 @@ for [go-i18n](https://github.com/nicksnyder/go-i18n) module.
 ## Install
 
 ```
-go get github.com/avixFF/go-locale
+go get github.com/MajorLettuce/go-locale
 ```
 
 ## Usage
@@ -25,7 +25,7 @@ import (
 	"embed"
 	"fmt"
 
-	"github.com/avixFF/go-locale"
+	"github.com/MajorLettuce/go-locale"
 )
 
 // Embed FS variable must be defined outside of a function

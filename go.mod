@@ -1,4 +1,4 @@
-module github.com/avixFF/go-locale
+module github.com/MajorLettuce/go-locale
 
 go 1.18
 
